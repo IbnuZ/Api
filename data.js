@@ -84,16 +84,13 @@ app.get('/api/leaderboard/:leaderboardId', async (req, res) => {
     }
 
     const query = `
-    SELECT DISTINCT s1.score, s1.quiz_id, s1.name, q.name as quiz_name
-    FROM scores s1
-    JOIN quiz q ON s1.quiz_id = q.id
-    WHERE s1.score = (
-        SELECT MAX(s2.score)
-        FROM scores s2
-        WHERE s1.quiz_id = s2.quiz_id
-    )
-    AND q.kategori_id = $1
-    ORDER BY s1.score DESC;`; 
+      SELECT s.name , q.name AS quiz_name, MAX(s.score) AS score
+FROM scores s
+INNER JOIN quiz q ON s.quiz_id = q.id
+WHERE q.kategori_id = $1
+GROUP BY s.name, q.name 
+order by score desc;
+`; 
 
     const { rows } = await client.query(query, [leaderboardId]);
     res.json(rows);

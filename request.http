@@ -6,4 +6,4 @@ Get http://localhost:8080/api/quizCategory/1
 
 ###
 
-GET http://localhost:8080/api/leaderboard/1
+GET http://localhost:8081/api/leaderboard/1
